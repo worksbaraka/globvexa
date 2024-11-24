@@ -4,16 +4,65 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>StudySync Stream</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <h1>StudySync Stream</h1>
-        <button id="createRoom">Create Room</button>
-        <input id="roomCode" type="text" placeholder="Enter Room Code">
-        <button id="joinRoom">Join Room</button>
-    </div>
-    <div id="historyContainer"></div>
+    <nav class="navbar">
+        <div class="nav-brand">
+            <i class="fas fa-graduation-cap"></i>
+            <span>StudySync Stream</span>
+        </div>
+        <button id="themeToggle" class="theme-toggle">
+            <i class="fas fa-moon"></i>
+        </button>
+    </nav>
+
+    <main class="container">
+        <div class="hero-section">
+            <h1>Welcome to StudySync Stream</h1>
+            <p>Connect, Collaborate, and Excel Together</p>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <h2>Create Room</h2>
+                <p>Start a new study session</p>
+                <div class="room-creation-form">
+                    <input type="text" id="roomName" placeholder="Room Name" class="input-field">
+                    <select id="roomType" class="input-field">
+                        <option value="study">Study Group</option>
+                        <option value="discussion">Discussion</option>
+                        <option value="project">Project Work</option>
+                    </select>
+                    <button id="createRoom" class="primary-button">
+                        <i class="fas fa-plus"></i> Create Room
+                    </button>
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <h2>Join Room</h2>
+                <p>Enter an existing session</p>
+                <div class="room-join-form">
+                    <input type="text" id="roomCode" placeholder="Enter Room Code" class="input-field">
+                    <button id="joinRoom" class="secondary-button">
+                        <i class="fas fa-sign-in-alt"></i> Join Room
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="active-rooms">
+            <h2>Recent Rooms</h2>
+            <div id="roomsList" class="rooms-grid"></div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>© 2024 StudySync Stream. All rights reserved.</p>
+    </footer>
+
     <script src="app.js"></script>
 </body>
 </html>

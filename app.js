@@ -1,61 +1,103 @@
-const roomHistoryKey = "studySyncRoomHistory";
+// Theme handling
+document.getElementById('themeToggle').addEventListener('click', () => {
+    const currentTheme = document.documentElement.getAttribute('data-theme');
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', newTheme);
+    
+    // Update theme icon
+    const themeIcon = document.querySelector('#themeToggle i');
+    themeIcon.className = newTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+    
+    // Save theme preference
+    localStorage.setItem('theme', newTheme);
+});
 
-function saveRoomToHistory(roomCode) {
-    let history = JSON.parse(localStorage.getItem(roomHistoryKey)) || [];
-    if (!history.includes(roomCode)) {
-        history.push(roomCode);
-        localStorage.setItem(roomHistoryKey, JSON.stringify(history));
-    }
-}
+// Load saved theme
+const savedTheme = localStorage.getItem('theme') || 'light';
+document.documentElement.setAttribute('data-theme', savedTheme);
+document.querySelector('#themeToggle i').className = savedTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
 
-function displayRoomHistory() {
-    const history = JSON.parse(localStorage.getItem(roomHistoryKey)) || [];
-    const historyContainer = document.getElementById("historyContainer");
-    historyContainer.innerHTML = "";
+// Room creation
+document.getElementById('createRoom').addEventListener('click', () => {
+    const roomName = document.getElementById('roomName').value.trim();
+    const roomType = document.getElementById('roomType').value;
 
-    if (history.length === 0) {
-        historyContainer.innerHTML = "<p>No room history yet.</p>";
+    if (!roomName) {
+        alert('Please enter a room name');
         return;
     }
 
-    history.forEach((room) => {
-        const roomLink = document.createElement("button");
-        roomLink.textContent = room;
-        roomLink.onclick = () => {
-            window.location.href = `https://meet.jit.si/${room}`;
-        };
-        roomLink.className = "history-button";
-        historyContainer.appendChild(roomLink);
-    });
-}
+    // Generate room code from name
+    const roomCode = roomName.toLowerCase().replace(/\s+/g, '-') + '-' + Math.random().toString(36).substr(2, 4);
 
-// Save and load room history
-document.getElementById('createRoom').addEventListener('click', () => {
-    const roomNickname = prompt("Enter a nickname for your room:");
-    if (roomNickname) {
-        const roomCode = roomNickname.replace(/\s+/g, '-').toLowerCase();
-        saveRoomToHistory(roomCode);
-        window.location.href = `https://meet.jit.si/${roomCode}`;
-    } else {
-        alert("Room nickname cannot be empty.");
+    // Save room to recent rooms
+    saveRecentRoom(roomCode, roomName, roomType);
+
+    // Redirect to Jitsi with room settings
+    const username = prompt('Enter your display name:');
+    if (username) {
+        joinRoom(roomCode, username);
     }
 });
 
+// Room joining
 document.getElementById('joinRoom').addEventListener('click', () => {
     const roomCode = document.getElementById('roomCode').value.trim();
-    if (roomCode) {
-        saveRoomToHistory(roomCode);
-        const username = prompt("Enter your username:");
-        if (username) {
-            const roomURL = `https://meet.jit.si/${roomCode}#userInfo.displayName="${username}"`;
-            window.location.href = roomURL;
-        } else {
-            alert("Username cannot be empty.");
-        }
-    } else {
-        alert("Please enter a room code.");
+    
+    if (!roomCode) {
+        alert('Please enter a room code');
+        return;
+    }
+
+    const username = prompt('Enter your display name:');
+    if (username) {
+        joinRoom(roomCode, username);
     }
 });
 
-// Display history on page load
-document.addEventListener('DOMContentLoaded', displayRoomHistory);
+// Join room function
+function joinRoom(roomCode, username) {
+    const roomURL = `https://meet.jit.si/${roomCode}#userInfo.displayName="${username}"`;
+    window.location.href = roomURL;
+}
+
+// Save recent room
+function saveRecentRoom(code, name, type) {
+    const recentRooms = JSON.parse(localStorage.getItem('recentRooms') || '[]');
+    
+    // Add new room to beginning of array
+    recentRooms.unshift({
+        code,
+        name,
+        type,
+        timestamp: new Date().toISOString()
+    });
+
+    // Keep only last 5 rooms
+    if (recentRooms.length > 5) {
+        recentRooms.pop();
+    }
+
+    localStorage.setItem('recentRooms', JSON.stringify(recentRooms));
+    updateRecentRoomsList();
+}
+
+// Update recent rooms list
+function updateRecentRoomsList() {
+    const recentRooms = JSON.parse(localStorage.getItem('recentRooms') || '[]');
+    const roomsList = document.getElementById('roomsList');
+    
+    roomsList.innerHTML = recentRooms.map(room => `
+        <div class="room-card">
+            <h3>${room.name}</h3>
+            <p>Type: ${room.type}</p>
+            <p>Created: ${new Date(room.timestamp).toLocaleDateString()}</p>
+            <button class="secondary-button" onclick="joinRoom('${room.code}', prompt('Enter your display name:'))">
+                <i class="fas fa-sign-in-alt"></i> Join
+            </button>
+        </div>
+    `).join('');
+}
+
+// Initial load of recent rooms
+updateRecentRoomsList();
