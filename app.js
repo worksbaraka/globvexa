@@ -1,5 +1,3 @@
-import { Analytics } from "@vercel/analytics/react"
-
 // Theme handling
 document.getElementById('themeToggle').addEventListener('click', () => {
     const currentTheme = document.documentElement.getAttribute('data-theme');
