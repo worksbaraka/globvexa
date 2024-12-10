@@ -44,6 +44,8 @@ body {
 }
 
 .nav-brand {
+    height: 50px;
+    width: auto;
     display: flex;
     align-items: center;
     gap: 0.5rem;

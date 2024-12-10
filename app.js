@@ -1,13 +1,19 @@
+import { Analytics } from "@vercel/analytics/react"
+
 // Theme handling
 document.getElementById('themeToggle').addEventListener('click', () => {
     const currentTheme = document.documentElement.getAttribute('data-theme');
     const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
     document.documentElement.setAttribute('data-theme', newTheme);
-    
+
     // Update theme icon
     const themeIcon = document.querySelector('#themeToggle i');
     themeIcon.className = newTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
-    
+
+    // Update logo
+    const logo = document.getElementById('logo');
+    logo.src = newTheme === 'dark' ? 'assets/logo-dark.png' : 'assets/logo-light.png';
+
     // Save theme preference
     localStorage.setItem('theme', newTheme);
 });
@@ -16,6 +22,10 @@ document.getElementById('themeToggle').addEventListener('click', () => {
 const savedTheme = localStorage.getItem('theme') || 'light';
 document.documentElement.setAttribute('data-theme', savedTheme);
 document.querySelector('#themeToggle i').className = savedTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+
+// Set logo on load
+const logo = document.getElementById('logo');
+logo.src = savedTheme === 'dark' ? 'assets/logo-dark.png' : 'assets/logo-light.png';
 
 // Room creation
 document.getElementById('createRoom').addEventListener('click', () => {
