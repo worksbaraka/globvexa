@@ -1,6 +1,6 @@
-# StudySync Stream
+# Globvexa
 
-**StudySync Stream** is a collaborative platform designed to help users connect, collaborate, and excel in their studies. It features room creation, room joining, recent room tracking, and a responsive design.
+**Globvexa** is a collaborative platform designed to help users connect, collaborate, and excel in their studies. It features room creation, room joining, recent room tracking, and a responsive design.
 
 ---
 
@@ -25,6 +25,6 @@
 ## Live
 
 Visit the live version hosted on **GitHub Pages**:
-[StudySync Stream](https://barakahworks.github.io/StudySync-Stream)
+[Globvexa](https://barakahworks.github.io/globvexa)
 
 ---
