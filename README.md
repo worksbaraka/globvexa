@@ -25,6 +25,6 @@
 ## Live
 
 Visit the live version hosted on **GitHub Pages**:
-[Globvexa](https://barakahworks.github.io/globvexa)
+[Globvexa](https://globvexa.vercel.app/)
 
 ---
